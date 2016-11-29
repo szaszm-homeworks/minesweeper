@@ -14,9 +14,9 @@ public class Window extends JFrame {
         setJMenuBar(menubar);
 
         FieldGraphicsProvider fieldGraphicsProvider = new FieldGraphicsProvider();
-        playBoard = new Board(3,3, fieldGraphicsProvider);
+        playBoard = new Board(4,3, fieldGraphicsProvider);
 
-        setLayout(new BorderLayout());
+        setLayout(new FlowLayout());
         add(playBoard);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);

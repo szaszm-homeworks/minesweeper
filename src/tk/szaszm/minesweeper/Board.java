@@ -13,9 +13,12 @@ class Board extends JPanel {
     private int boardHeight;
 
     Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider) {
-        super(new GridLayout(boardWidth, boardHeight));
+        super(new GridLayout(boardHeight, boardWidth));
+
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
+        setMinimumSize(new Dimension(boardWidth*50, boardHeight*50));
+        setPreferredSize(new Dimension(boardWidth*50, boardHeight*50));
         fields = new ArrayList<>();
         for (int y = 0; y < boardHeight; ++y) {
             for (int x = 0; x < boardWidth; x++) {

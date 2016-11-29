@@ -2,6 +2,8 @@ package tk.szaszm.minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.lang.ref.WeakReference;
 
@@ -30,6 +32,24 @@ public class Field extends JComponent {
         bomb = false;
         fieldState = FieldState.UNREVEALED;
         this.fieldGraphicsProvider = fieldGraphicsProvider;
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                explore();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) { }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) { }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) { }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) { }
+        });
     }
 
     public Field getTopLeft() {
@@ -161,7 +181,33 @@ public class Field extends JComponent {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         if (image != null) {
-            graphics.drawImage(image, 0, 0, 30, 30, 0, 0, 114, 114, null);
+            graphics.drawImage(image, 0, 0, 50, 50, 0, 0, 114, 114, null);
         }
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(50, 50);
+    }
+
+    public void explore() {
+        if(fieldState != FieldState.UNREVEALED) return;
+        fieldState = FieldState.REVEALED;
+        if(isBomb()) {
+            setBackground(Color.RED);
+        }
+
+        if(getNumberOfSurroundingBombs() == 0) {
+            if(topLeft != null && topLeft.get() != null) topLeft.get().explore();
+            if(topCenter != null && topCenter.get() != null) topCenter.get().explore();
+            if(topRight != null && topRight.get() != null) topRight.get().explore();
+            if(middleLeft != null && middleLeft.get() != null) middleLeft.get().explore();
+            if(middleRight != null && middleRight.get() != null) middleRight.get().explore();
+            if(bottomLeft != null && bottomLeft.get() != null) bottomLeft.get().explore();
+            if(bottomCenter != null && bottomCenter.get() != null) bottomCenter.get().explore();
+            if(bottomRight != null && bottomRight.get() != null) bottomRight.get().explore();
+        }
+
+        updateIcon();
     }
 }
