@@ -19,6 +19,8 @@ public class Window extends JFrame {
         setJMenuBar(menubar);
         menubar.setNewGameListener(actionEvent -> generateBoard());
 
+        setResizable(false);
+
         generateBoard();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -26,8 +28,12 @@ public class Window extends JFrame {
 
     public void generateBoard() {
         if(board != null) remove(board);
-        board = new Board(16, 9, fieldGraphicsProvider);
-        boardGenerator.generateBombs(board, 1);
+        int width = 9;
+        int height = 9;
+        setMinimumSize(new Dimension(width * Field.SIZE + 20, height * Field.SIZE + 30));
+        setMaximumSize(new Dimension(width * Field.SIZE + 20, height * Field.SIZE + 30));
+        setPreferredSize(new Dimension(width * Field.SIZE + 20, height * Field.SIZE + 30));
+        board = new Board(width, height, fieldGraphicsProvider, boardGenerator);
         add(board);
         revalidate();
         repaint();

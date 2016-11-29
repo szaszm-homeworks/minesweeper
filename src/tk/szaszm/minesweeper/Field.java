@@ -211,6 +211,7 @@ public class Field extends JComponent {
     }
 
     private void explore() {
+        if(!board.isInitialized()) board.initialize(getFieldX(), getFieldY());
         if(board.isEnded()) return;
 
         doExplore();
@@ -251,7 +252,7 @@ public class Field extends JComponent {
             if(bottomCenter != null && bottomCenter.get() != null && bottomCenter.get().getFieldState() != FieldState.MARKED) bottomCenter.get().doExplore();
             if(bottomRight != null && bottomRight.get() != null && bottomRight.get().getFieldState() != FieldState.MARKED) bottomRight.get().doExplore();
         }
-        
+
         updateIcon();
         board.check();
     }

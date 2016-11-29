@@ -12,12 +12,16 @@ class Board extends JPanel {
     private int boardWidth;
     private int boardHeight;
     private boolean ended;
+    private BoardGenerator generator;
+    private boolean initialized;
 
-    Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider) {
+    Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider, BoardGenerator generator) {
         super(new GridLayout(boardHeight, boardWidth));
 
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
+        this.generator = generator;
+        initialized = false;
         setMinimumSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
         setPreferredSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
         fields = new ArrayList<>();
@@ -109,5 +113,24 @@ class Board extends JPanel {
 
     public boolean isEnded() {
         return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+
+    void setInitialized(boolean initialized) {
+        this.initialized = initialized;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    void initialize(int x, int y) {
+        do {
+            if(isInitialized()) generator.resetBoard(this);
+            generator.generateBombs(this, 9);
+        } while (getFieldAt(x, y).isBomb());
     }
 }
