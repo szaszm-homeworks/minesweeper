@@ -5,22 +5,31 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Window extends JFrame {
-    private Menubar menubar;
-    private Board playBoard;
+    private Board board;
+    private BoardGenerator boardGenerator;
+    private FieldGraphicsProvider fieldGraphicsProvider;
 
-    public Window() throws IOException {
+    public Window(BoardGenerator boardGenerator, FieldGraphicsProvider fieldGraphicsProvider, Menubar menubar) throws IOException {
         super("Minesweeper");
-        menubar = new Menubar();
-        setJMenuBar(menubar);
 
-        FieldGraphicsProvider fieldGraphicsProvider = new FieldGraphicsProvider();
-        playBoard = new Board(4,3, fieldGraphicsProvider);
+        this.fieldGraphicsProvider = fieldGraphicsProvider;
+        this.boardGenerator = boardGenerator;
 
         setLayout(new FlowLayout());
-        add(playBoard);
+        setJMenuBar(menubar);
+        menubar.setNewGameListener(actionEvent -> generateBoard());
+
+        generateBoard();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
 
-        setVisible(true);
+    public void generateBoard() {
+        if(board != null) remove(board);
+        board = new Board(16, 9, fieldGraphicsProvider);
+        boardGenerator.generateBombs(board, 1);
+        add(board);
+        revalidate();
+        repaint();
     }
 }

@@ -11,18 +11,19 @@ class Board extends JPanel {
     private ArrayList<Field> fields;
     private int boardWidth;
     private int boardHeight;
+    private boolean ended;
 
     Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider) {
         super(new GridLayout(boardHeight, boardWidth));
 
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
-        setMinimumSize(new Dimension(boardWidth*50, boardHeight*50));
-        setPreferredSize(new Dimension(boardWidth*50, boardHeight*50));
+        setMinimumSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
+        setPreferredSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
         fields = new ArrayList<>();
         for (int y = 0; y < boardHeight; ++y) {
             for (int x = 0; x < boardWidth; x++) {
-                Field field = new Field(x, y, fieldGraphicsProvider);
+                Field field = new Field(x, y, fieldGraphicsProvider, this);
                 fields.add(field);
                 add(field);
             }
@@ -57,5 +58,56 @@ class Board extends JPanel {
     public Field getFieldAt(int x, int y) {
         if (x < 0 || y < 0 || x >= boardWidth || y >= boardHeight) return null;
         return getFieldAt(y * boardWidth + x);
+    }
+
+    public int getBoardWidth() {
+        return boardWidth;
+    }
+
+    public int getBoardHeight() {
+        return boardHeight;
+    }
+
+    void check() {
+        if(bombRevealed()) {
+            ended = true;
+            JOptionPane.showMessageDialog(this, "Vesztettél!");
+        }
+
+        if(areBombsMarked() || allRevealed()) {
+            ended = true;
+            JOptionPane.showMessageDialog(this, "Nyertél!");
+        }
+    }
+
+    private boolean areBombsMarked() {
+        for (Field field: fields) {
+            if((field.isBomb() && field.getFieldState() != FieldState.MARKED)
+                    || (!field.isBomb() && field.getFieldState() == FieldState.MARKED)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean allRevealed() {
+        for(Field field: fields) {
+            if(!field.isBomb() && field.getFieldState() != FieldState.REVEALED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean bombRevealed() {
+        for(Field field: fields) {
+            if(field.isBomb() && field.getFieldState() == FieldState.REVEALED) return true;
+        }
+
+        return false;
+    }
+
+    public boolean isEnded() {
+        return ended;
     }
 }

@@ -11,6 +11,8 @@ import java.lang.ref.WeakReference;
  * Created by marci on 2016.11.28..
  */
 public class Field extends JComponent {
+    final static int SIZE = 30;
+
     private WeakReference<Field> topLeft;
     private WeakReference<Field> topCenter;
     private WeakReference<Field> topRight;
@@ -25,17 +27,20 @@ public class Field extends JComponent {
     private FieldState fieldState;
     private BufferedImage image;
     private FieldGraphicsProvider fieldGraphicsProvider;
+    private Board board;
 
-    public Field(int x, int y, FieldGraphicsProvider fieldGraphicsProvider) {
+    public Field(int x, int y, FieldGraphicsProvider fieldGraphicsProvider, Board board) {
         fieldX = x;
         fieldY = y;
         bomb = false;
         fieldState = FieldState.UNREVEALED;
         this.fieldGraphicsProvider = fieldGraphicsProvider;
+        this.board = board;
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                explore();
+                if(mouseEvent.getButton() == MouseEvent.BUTTON1) explore();
+                else if(mouseEvent.getButton() == MouseEvent.BUTTON3) toggleMark();
             }
 
             @Override
@@ -165,6 +170,21 @@ public class Field extends JComponent {
         return cnt;
     }
 
+    private int getNumberOfSurroundingMarkedFields() {
+        int cnt = 0;
+
+        if(topLeft != null && topLeft.get() != null && topLeft.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(topCenter != null && topCenter.get() != null && topCenter.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(topRight != null && topRight.get() != null && topRight.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(middleLeft != null && middleLeft.get() != null && middleLeft.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(middleRight != null && middleRight.get() != null && middleRight.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(bottomLeft != null && bottomLeft.get() != null && bottomLeft.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(bottomCenter != null && bottomCenter.get() != null && bottomCenter.get().getFieldState() == FieldState.MARKED) ++cnt;
+        if(bottomRight != null && bottomRight.get() != null && bottomRight.get().getFieldState() == FieldState.MARKED) ++cnt;
+
+        return cnt;
+    }
+
     private String getType() {
         if(getFieldState() == FieldState.UNREVEALED) return "unrevealed";
         if(getFieldState() == FieldState.MARKED) return "flag";
@@ -181,33 +201,58 @@ public class Field extends JComponent {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         if (image != null) {
-            graphics.drawImage(image, 0, 0, 50, 50, 0, 0, 114, 114, null);
+            graphics.drawImage(image, 0, 0, SIZE, SIZE, 0, 0, image.getWidth(), image.getHeight(), null);
         }
     }
 
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(50, 50);
+        return new Dimension(SIZE, SIZE);
     }
 
-    public void explore() {
+    private void explore() {
+        if(board.isEnded()) return;
+
+        doExplore();
+
+        board.check();
+    }
+
+    private void doExplore() {
         if(fieldState != FieldState.UNREVEALED) return;
         fieldState = FieldState.REVEALED;
-        if(isBomb()) {
-            setBackground(Color.RED);
+
+        String type = getType();
+        if(type.equals("0")) {
+            if(topLeft != null && topLeft.get() != null) topLeft.get().doExplore();
+            if(topCenter != null && topCenter.get() != null) topCenter.get().doExplore();
+            if(topRight != null && topRight.get() != null) topRight.get().doExplore();
+            if(middleLeft != null && middleLeft.get() != null) middleLeft.get().doExplore();
+            if(middleRight != null && middleRight.get() != null) middleRight.get().doExplore();
+            if(bottomLeft != null && bottomLeft.get() != null) bottomLeft.get().doExplore();
+            if(bottomCenter != null && bottomCenter.get() != null) bottomCenter.get().doExplore();
+            if(bottomRight != null && bottomRight.get() != null) bottomRight.get().doExplore();
         }
 
-        if(getNumberOfSurroundingBombs() == 0) {
-            if(topLeft != null && topLeft.get() != null) topLeft.get().explore();
-            if(topCenter != null && topCenter.get() != null) topCenter.get().explore();
-            if(topRight != null && topRight.get() != null) topRight.get().explore();
-            if(middleLeft != null && middleLeft.get() != null) middleLeft.get().explore();
-            if(middleRight != null && middleRight.get() != null) middleRight.get().explore();
-            if(bottomLeft != null && bottomLeft.get() != null) bottomLeft.get().explore();
-            if(bottomCenter != null && bottomCenter.get() != null) bottomCenter.get().explore();
-            if(bottomRight != null && bottomRight.get() != null) bottomRight.get().explore();
-        }
 
         updateIcon();
+    }
+
+    private void toggleMark() {
+        if(fieldState == FieldState.UNREVEALED) fieldState = FieldState.MARKED;
+        else if(fieldState == FieldState.MARKED) fieldState = FieldState.UNREVEALED;
+        else if(!isBomb() && getNumberOfSurroundingBombs() == getNumberOfSurroundingMarkedFields()) {
+            if(topLeft != null && topLeft.get() != null && topLeft.get().getFieldState() != FieldState.MARKED) topLeft.get().doExplore();
+            if(topCenter != null && topCenter.get() != null && topCenter.get().getFieldState() != FieldState.MARKED) topCenter.get().doExplore();
+            if(topRight != null && topRight.get() != null && topRight.get().getFieldState() != FieldState.MARKED) topRight.get().doExplore();
+            if(middleLeft != null && middleLeft.get() != null && middleLeft.get().getFieldState() != FieldState.MARKED) middleLeft.get().doExplore();
+            if(middleRight != null && middleRight.get() != null && middleRight.get().getFieldState() != FieldState.MARKED) middleRight.get().doExplore();
+            if(bottomLeft != null && bottomLeft.get() != null && bottomLeft.get().getFieldState() != FieldState.MARKED) bottomLeft.get().doExplore();
+            if(bottomCenter != null && bottomCenter.get() != null && bottomCenter.get().getFieldState() != FieldState.MARKED) bottomCenter.get().doExplore();
+            if(bottomRight != null && bottomRight.get() != null && bottomRight.get().getFieldState() != FieldState.MARKED) bottomRight.get().doExplore();
+        }
+        
+        updateIcon();
+        board.check();
     }
 }
