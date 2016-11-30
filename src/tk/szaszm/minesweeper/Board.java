@@ -2,6 +2,7 @@ package tk.szaszm.minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -14,17 +15,21 @@ class Board extends JPanel {
     private boolean ended;
     private BoardGenerator generator;
     private boolean initialized;
+    private WeakReference<Window> window;
 
-    Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider, BoardGenerator generator) {
+    Board(int boardWidth, int boardHeight, FieldGraphicsProvider fieldGraphicsProvider, BoardGenerator generator, Window window) {
         super(new GridLayout(boardHeight, boardWidth));
 
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         this.generator = generator;
         initialized = false;
+
+        this.window = new WeakReference<>(window);
+
+        fields = new ArrayList<>();
         setMinimumSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
         setPreferredSize(new Dimension(boardWidth*Field.SIZE, boardHeight*Field.SIZE));
-        fields = new ArrayList<>();
         for (int y = 0; y < boardHeight; ++y) {
             for (int x = 0; x < boardWidth; x++) {
                 Field field = new Field(x, y, fieldGraphicsProvider, this);
@@ -74,12 +79,12 @@ class Board extends JPanel {
 
     void check() {
         if(bombRevealed()) {
-            ended = true;
+            setEnded(true);
             JOptionPane.showMessageDialog(this, "Vesztettél!");
         }
 
         if(areBombsMarked() || allRevealed()) {
-            ended = true;
+            setEnded(true);
             JOptionPane.showMessageDialog(this, "Nyertél!");
         }
     }
@@ -117,6 +122,9 @@ class Board extends JPanel {
 
     public void setEnded(boolean ended) {
         this.ended = ended;
+        if(ended) {
+            window.get().stopTimer();
+        }
     }
 
     void setInitialized(boolean initialized) {
@@ -132,5 +140,7 @@ class Board extends JPanel {
             if(isInitialized()) generator.resetBoard(this);
             generator.generateBombs(this, 9);
         } while (getFieldAt(x, y).isBomb());
+
+        window.get().startTimer();
     }
 }

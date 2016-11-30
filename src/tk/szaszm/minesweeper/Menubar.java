@@ -1,15 +1,9 @@
 package tk.szaszm.minesweeper;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by marci on 2016.11.28..
- */
 class Menubar extends JMenuBar {
-    private JMenu file;
-    private JMenu edit;
     private JMenuItem newGame;
     private ActionListener newGameListener;
 
@@ -18,7 +12,7 @@ class Menubar extends JMenuBar {
 
         newGameListener = null;
 
-        file = new JMenu("File");
+        JMenu file = new JMenu("File");
         file.setMnemonic('f');
         newGame = new JMenuItem("New game");
         newGame.setMnemonic('n');
@@ -29,14 +23,10 @@ class Menubar extends JMenuBar {
         file.add(new JSeparator());
         file.add(exit);
 
-        edit = new JMenu("Edit");
-        edit.setMnemonic('e');
-
         add(file);
-        add(edit);
     }
 
-    public void setNewGameListener(ActionListener actionListener) {
+    void setNewGameListener(ActionListener actionListener) {
         newGameListener = actionListener;
         if(newGame == null) return;
         if(newGameListener != null) newGame.removeActionListener(newGameListener);
