@@ -1,13 +1,18 @@
 package tk.szaszm.minesweeper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
  * Created by marci on 2016.11.29..
  */
 public class BoardGenerator {
-    private static Random rnd = new Random();
+    private Random rnd;
+
+    public BoardGenerator() {
+        rnd = new Random();
+    }
 
     private double getBombRatioByDifficultyLevel(int difficultyLevel) {
         if(difficultyLevel < 0) difficultyLevel = 0;
@@ -16,28 +21,27 @@ public class BoardGenerator {
     }
 
     public void generateBombs(Board board, int difficultyLevel) {
-        System.out.println("generate");
         double bombRatio = getBombRatioByDifficultyLevel(difficultyLevel);
         int len = board.getBoardHeight()*board.getBoardWidth();
         int nBombs = (int)(len*bombRatio);
         ArrayList<Integer> bombPositions = new ArrayList<>();
         for (int i = 0; i < nBombs; i++) {
             int newpos = rnd.nextInt(len - bombPositions.size());
-            int cnt = 0;
             for(int pos: bombPositions) {
-                if(pos <= newpos) cnt++;
+                if(pos <= newpos) newpos++;
             }
-            newpos += cnt;
             bombPositions.add(newpos);
+            Collections.sort(bombPositions);
         }
 
         for(int pos: bombPositions) {
             board.getFieldAt(pos).setBomb(true);
         }
+
+        board.setInitialized(true);
     }
 
     public void resetBoard(Board board) {
-        System.out.println("reset");
         for (int i = 0; i < board.getBoardWidth() * board.getBoardHeight(); i++) {
             Field field = board.getFieldAt(i);
             field.setFieldState(FieldState.UNREVEALED);
