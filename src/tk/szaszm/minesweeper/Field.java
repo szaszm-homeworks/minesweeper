@@ -170,7 +170,7 @@ public class Field extends JComponent {
         return cnt;
     }
 
-    private int getNumberOfSurroundingMarkedFields() {
+    public int getNumberOfSurroundingMarkedFields() {
         int cnt = 0;
 
         if(topLeft != null && topLeft.get() != null && topLeft.get().getFieldState() == FieldState.MARKED) ++cnt;
@@ -193,8 +193,10 @@ public class Field extends JComponent {
     }
 
     private void updateIcon() {
-        image = fieldGraphicsProvider.get(getType());
-        repaint();
+        if(fieldGraphicsProvider != null) {
+            image = fieldGraphicsProvider.get(getType());
+            repaint();
+        }
     }
 
     @Override

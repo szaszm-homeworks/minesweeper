@@ -105,7 +105,6 @@ public class ResultsWindow extends JFrame {
         truncateResults();
     }
 
-    private static int counter = 2;
     public void showScoresForDifficulty(int difficultyLevel) {
         currentDifficultyLevel = difficultyLevel;
         loadScores(difficultyLevel);

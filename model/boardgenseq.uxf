@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>590</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>title=Board generation
+obj=BoardGenerator~bg
+obj=Board~b
+obj=Field~f
+combinedFragment=loop~loop bg f; f:[i &lt; nBombs]
+bg-&gt;b:getFieldAt()
+bg-&gt;f:setBomb()
+--
+bg-&gt;b:setInitialized()</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

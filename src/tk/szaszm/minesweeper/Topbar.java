@@ -37,7 +37,7 @@ public class Topbar extends JPanel {
         timer.start();
     }
 
-    private void incrementCounter() {
+    public void incrementCounter() {
         counter++;
         jLabel.setText(Integer.toString(counter));
     }

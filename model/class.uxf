@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>30</y>
+      <w>170</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Main
+--
+_main(args: String[])_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>220</y>
+      <w>330</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Application
+--
+-window: Window
+-menubar: Menubar
+-boardGenerator: BoardGenerator
+-fieldGraphicsProvider: FieldGraphicsProvider
+--
++run()
+_-getDifficultyLevel(): int_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>70</y>
+      <w>30</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>40</y>
+      <w>350</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Window
+--
+-fieldGraphicsProvider: FieldGraphicsProvider
+-boardGenerator: BoardGenerator
+-timerStarted: boolean
+--
++generateBoard()
++startTimer()
++stopTimer()
++showResultsWindow(difficultyLevel: int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>0</y>
+      <w>300</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>280.0;40.0;280.0;10.0;10.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>430</x>
+      <y>400</y>
+      <w>270</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+-fields: Field[]
+-boardWidth: int
+-boardHeight: int
+-ended: boolean
+-boardGenerator: BoardGenerator
+-initialized: boolean
+-window: Window
+--
++getFieldAt(id: int): Field
++getFieldAt(x: int, y: int): Field
++getBoardWidth(): int
++getBoardHeight(): int
+-check()
+-areBombsMarked(): boolean
+-allRevealed(): boolean
+-bombsRevealed(): boolean
++isEnded(): boolean
++setEnded(ended: boolean)
+-setInitialized(initialized: boolean)
++isInitialized(): boolean
+-initialize(): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>180</y>
+      <w>30</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;220.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>260</y>
+      <w>160</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>Topbar
+--
+-timer: Timer
+-counter: int
+-jLabel: JLabel
+--
++stopTimer()
++resetTimer()
++startTimer()
+-incrementCounter()
++getCounter: int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>970</x>
+      <y>270</y>
+      <w>390</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>ResultsWindow
+--
+-close: JButton
+-results: Result[]
+-resultsView: ResultsView
+-currentDifficultyLevel: int
+-nameInputPanel: NameInputPanel
+-window: Window
+--
+-refreshResultsView()
+-loadScores(difficultyLevel: int)
+-truncateRecords()
+-saveScores(difficultyLevel: int)
+-addScore(result: Result)
+-addScore(name: String, points: int)
++showScoresForDifficulty(difficultyLevel: int)
++showWithNameInput(difficultyLevel: int, points: int)
+-onCloseButtonPressed()
++setResultFromPanel(String name, int points)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>180</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>210.0;80.0;210.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>180</y>
+      <w>520</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>500.0;90.0;500.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>750</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>850</y>
+      <w>390</w>
+      <h>780</h>
+    </coordinates>
+    <panel_attributes>Field
+--
+-topLeft: Field
+-topCenter: Field
+-topRight: Field
+-middleLeft: Field
+-middleRight: Field
+-bottomLeft: Field
+-bottomCenter: Field
+-bottomRight: Field
+-fieldX: int
+-fieldY: int
+-bomb: boolean
+-fieldState: FieldState
+-image: BufferedImage
+-fieldGraphicsProvider: FieldGraphicsProvider
+-board: Board
+--
++getTopLeft(): Field
++getTopCenter(): Field
++getTopRight(): Field
++getMiddleLeft(): Field
++getMiddleRight(): Field
++getBottomLeft(): Field
++getBottomCenter(): Field
++getBottomRight(): Field
++getFieldX(): int
++getFieldY(): int
++setTopLeft(field: Field)
++setTopCenter(field: Field)
++setTopRight(field: Field)
++setMiddleLeft(field: Field)
++setMiddleRight(field: Field)
++setBottomLeft(field: Field)
++setBottomCenter(field: Field)
++setBottomRight(field: Field)
++isBomb(): boolean
++setBomb(bomb: boolean)
++getFieldState(): FieldState
++setFieldState(fieldState: FieldState)
+-getNumberOfSurroundingBombs(): int
+-getNumberOfSurroundingMarkedFields(): int
+-getType(): String
+-updateIcon()
+#paintComponent(graphics: Graphics)
++getMinimumSize(): Dimension
+-explore()
+-doExplore()
+-toggleMark()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>920</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>FieldState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>920</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>970</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>BufferedImage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>970</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>1040</y>
+      <w>310</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>FieldGraphicsProvider
+--
+-imageMap: Map&lt;String,BufferedImage&gt;
+_-types: String[]_
+--
++get(type: String): bufferedImage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>1050</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>110</y>
+      <w>180</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>990</x>
+      <y>40</y>
+      <w>450</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>BoardGenerator
+--
+-rnd: Random
+--
+-getBombRationByDifficultyLevel(difficultyLevel: int): double
++generateBombs(board: Board, difficultyLevel: int)
++resetBoard(board: Board)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>490</y>
+      <w>130</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Result
+--
++name: String
++points: int
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>530</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>580</y>
+      <w>120</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>ResultsView
+--
++loadResults()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>560</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;50.0;140.0;50.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>700</y>
+      <w>350</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Menubar
+--
+-newGame: JMenuItem
+-newGameListener: ActionListener
+-results: JMenuItem
+-resultsListener: ActionListener
+--
++setNewGameListener(listener: ActionListener)
++setResultsListener(listener: ActionListener)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>180</y>
+      <w>290</w>
+      <h>540</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>270.0;520.0;270.0;480.0;150.0;480.0;150.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>330</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>title=Explore field
+obj=Field~f
+
+f-&gt;f +:doExplore()
+tick=
+combinedFragment=alt~alt; f:[type == "0"]
+combinedFragment=loop~loop ; f:[neighbors]
+
+f-&gt;f + :doExplore()
+
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
