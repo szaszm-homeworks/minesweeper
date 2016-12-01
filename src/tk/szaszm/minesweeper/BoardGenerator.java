@@ -17,7 +17,7 @@ public class BoardGenerator {
     private double getBombRatioByDifficultyLevel(int difficultyLevel) {
         if(difficultyLevel < 0) difficultyLevel = 0;
         if(difficultyLevel > 9) difficultyLevel = 9;
-        return 0.015 * (5 + difficultyLevel);
+        return 0.015 * (2 + difficultyLevel);
     }
 
     public void generateBombs(Board board, int difficultyLevel) {

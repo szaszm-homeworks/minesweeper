@@ -22,7 +22,7 @@ public class Window extends JFrame {
         setLayout(new FlowLayout());
         setJMenuBar(menubar);
         menubar.setNewGameListener(actionEvent -> generateBoard());
-        menubar.setResultsListener(actionEvent -> showResultsWindow(9));
+        menubar.setResultsListener(actionEvent -> showResultsWindow(Application.getDifficultyLevel()));
 
         setResizable(false);
 
@@ -33,7 +33,7 @@ public class Window extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        resultsWindow = new ResultsWindow();
+        resultsWindow = new ResultsWindow(this);
     }
 
     public void generateBoard() {
@@ -66,10 +66,10 @@ public class Window extends JFrame {
     public void showResultsWindow(int difficultyLevel) {
         int points = topbar.getCounter();
         if(board.isEnded()) {
-            //resultsWindow.showScoresForDifficulty(difficultyLevel, points);
-            resultsWindow.showScoresForDifficulty(difficultyLevel);
+            resultsWindow.showWithNameInput(difficultyLevel, points);
         } else {
             resultsWindow.showScoresForDifficulty(difficultyLevel);
         }
     }
+
 }

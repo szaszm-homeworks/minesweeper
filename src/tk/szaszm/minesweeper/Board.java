@@ -80,13 +80,13 @@ class Board extends JPanel {
     void check() {
         if(bombRevealed()) {
             setEnded(true);
-            JOptionPane.showMessageDialog(this, "Vesztettél!");
+            JOptionPane.showMessageDialog(this, "You lost!");
         }
 
         if(areBombsMarked() || allRevealed()) {
             setEnded(true);
-            JOptionPane.showMessageDialog(this, "Nyertél!");
-            window.get().showResultsWindow(9);
+            JOptionPane.showMessageDialog(this, "You won!");
+            window.get().showResultsWindow(Application.getDifficultyLevel());
         }
     }
 
@@ -139,7 +139,7 @@ class Board extends JPanel {
     void initialize(int x, int y) {
         do {
             if(isInitialized()) generator.resetBoard(this);
-            generator.generateBombs(this, 9);
+            generator.generateBombs(this, Application.getDifficultyLevel());
         } while (getFieldAt(x, y).isBomb());
 
         window.get().startTimer();

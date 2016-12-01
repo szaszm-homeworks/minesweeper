@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,14 +17,21 @@ public class ResultsWindow extends JFrame {
     private ArrayList<Result> results;
     private ResultsView resultsView;
     private int currentDifficultyLevel;
+    private NameInputPanel nameInputPanel;
+    private WeakReference<Window> window;
 
-    public ResultsWindow() {
+    public ResultsWindow(Window window) {
         super("Results");
+        this.window = new WeakReference<>(window);
         setLayout(new FlowLayout());
         currentDifficultyLevel = 0;
 
         resultsView = new ResultsView();
         add(resultsView);
+
+        nameInputPanel = new NameInputPanel(this, 0);
+        nameInputPanel.setVisible(false);
+        add(nameInputPanel);
 
         close = new JButton("Close");
         close.addMouseListener(new MouseListener() {
@@ -66,11 +74,20 @@ public class ResultsWindow extends JFrame {
             results = (ArrayList<Result>)objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
+            truncateResults();
         } catch(Exception ignored) { }
         if(results == null) results = new ArrayList<>();
     }
 
+    private void truncateResults() {
+        if(results.size() >= 6) {
+            results.subList(6, results.size()).clear();
+        }
+    }
+
     private void saveScores(int difficultyLevel) throws IOException {
+        Collections.sort(results);
+        truncateResults();
         FileOutputStream fileOutputStream = new FileOutputStream(difficultyLevel+".ser");
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(results);
@@ -85,13 +102,23 @@ public class ResultsWindow extends JFrame {
     private void addScore(Result result) {
         results.add(result);
         Collections.sort(results);
+        truncateResults();
     }
 
     private static int counter = 2;
     public void showScoresForDifficulty(int difficultyLevel) {
         currentDifficultyLevel = difficultyLevel;
         loadScores(difficultyLevel);
-        addScore("name", counter++);
+        setVisible(true);
+        nameInputPanel.setVisible(false);
+        refreshResultsView();
+    }
+
+    public void showWithNameInput(int difficultyLevel, int points) {
+        currentDifficultyLevel = difficultyLevel;
+        loadScores(difficultyLevel);
+        nameInputPanel.setVisible(true);
+        nameInputPanel.setPoints(points);
         setVisible(true);
         refreshResultsView();
     }
@@ -103,5 +130,12 @@ public class ResultsWindow extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void setResultFromPanel(String name, int points) {
+        addScore(name, points);
+        refreshResultsView();
+        window.get().generateBoard();
     }
 }

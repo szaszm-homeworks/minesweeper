@@ -22,4 +22,8 @@ public class Application {
     public void run() {
         window.setVisible(true);
     }
+
+    static int getDifficultyLevel() {
+        return 0;
+    }
 }
