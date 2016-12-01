@@ -41,4 +41,8 @@ public class Topbar extends JPanel {
         counter++;
         jLabel.setText(Integer.toString(counter));
     }
+
+    public int getCounter() {
+        return counter;
+    }
 }

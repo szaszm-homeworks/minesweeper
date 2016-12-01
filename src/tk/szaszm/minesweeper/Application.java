@@ -12,11 +12,12 @@ public class Application {
     private FieldGraphicsProvider fieldGraphicsProvider;
 
     public Application() throws IOException {
-        menubar = new Menubar();
+        this.menubar = new Menubar();
         boardGenerator = new BoardGenerator();
         fieldGraphicsProvider = new FieldGraphicsProvider();
-        window = new Window(boardGenerator, fieldGraphicsProvider, menubar);
+        window = new Window(boardGenerator, fieldGraphicsProvider, this.menubar);
     }
+
 
     public void run() {
         window.setVisible(true);

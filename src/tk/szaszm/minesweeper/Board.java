@@ -86,6 +86,7 @@ class Board extends JPanel {
         if(areBombsMarked() || allRevealed()) {
             setEnded(true);
             JOptionPane.showMessageDialog(this, "Nyertél!");
+            window.get().showResultsWindow(9);
         }
     }
 

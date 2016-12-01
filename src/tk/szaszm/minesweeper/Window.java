@@ -10,6 +10,7 @@ public class Window extends JFrame {
     private FieldGraphicsProvider fieldGraphicsProvider;
     private boolean timerStarted;
     private Topbar topbar;
+    private ResultsWindow resultsWindow;
 
     public Window(BoardGenerator boardGenerator, FieldGraphicsProvider fieldGraphicsProvider, Menubar menubar) throws IOException {
         super("Minesweeper");
@@ -21,6 +22,7 @@ public class Window extends JFrame {
         setLayout(new FlowLayout());
         setJMenuBar(menubar);
         menubar.setNewGameListener(actionEvent -> generateBoard());
+        menubar.setResultsListener(actionEvent -> showResultsWindow(9));
 
         setResizable(false);
 
@@ -30,6 +32,8 @@ public class Window extends JFrame {
         generateBoard();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        resultsWindow = new ResultsWindow();
     }
 
     public void generateBoard() {
@@ -57,5 +61,15 @@ public class Window extends JFrame {
 
     public void stopTimer() {
         topbar.stopTimer();
+    }
+
+    public void showResultsWindow(int difficultyLevel) {
+        int points = topbar.getCounter();
+        if(board.isEnded()) {
+            //resultsWindow.showScoresForDifficulty(difficultyLevel, points);
+            resultsWindow.showScoresForDifficulty(difficultyLevel);
+        } else {
+            resultsWindow.showScoresForDifficulty(difficultyLevel);
+        }
     }
 }
